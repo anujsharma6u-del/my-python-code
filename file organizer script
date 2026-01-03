@@ -1,0 +1,39 @@
+import os
+import shutil
+
+folder_path = r"C:\Users\YourUser\Downloads"
+
+file_types = {
+    "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp"],
+    "Documents": [".pdf", ".docx", ".txt", ".xlsx", ".pptx"],
+    "Videos": [".mp4", ".mov", ".avi", ".mkv"],
+    "Music": [".mp3", ".wav", ".aac", ".flac"],
+    "Archives": [".zip", ".rar", ".7z", ".tar", ".gz"]
+}
+
+def organize_files(folder_path):
+   
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+            if os.path.isfile(file_path):
+                moved = False
+                for category, extensions in file_types.items():
+                  if filename.lower().endswith(tuple(extensions)):
+
+                            category_path = os.path.join(folder_path, category)
+                            if not os.path.exists(category_path):
+                                os.makedirs(category_path)
+                            shutil.move(file_path, os.path.join(category_path, filename))
+                            moved = True
+                            break
+            if not moved:
+                        other_path = os.path.join(folder_path, "Others")
+                        if not os.path.exists(other_path):
+                            os.makedirs(other_path)
+                            shutil.move(file_path, os.path.join(other_path, filename))
+
+                            organize_files(folder_path)
+                            print("Files organized successfully.")
+          
+                            
+
